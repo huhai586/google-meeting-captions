@@ -1,0 +1,29 @@
+{
+  "name": "google-meeting-captions-resolver",
+  "version": "1.0.1",
+  "description": "a tool to get google meeting captions for chrome extension",
+  "scripts": {
+    "watch": "parcel watch",
+    "build": "parcel build"
+  },
+  "source": "src/index.ts",
+  "main": "dist/main.js",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huhai586/google-meeting-captions.git"
+  },
+  "keywords": [
+    "google-meeting",
+    "captions"
+  ],
+  "author": "huhai007@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/huhai586/google-meeting-captions/issues"
+  },
+  "homepage": "https://github.com/huhai586/google-meeting-captions#readme",
+  "devDependencies": {
+    "parcel": "^2.13.3"
+  }
+}
