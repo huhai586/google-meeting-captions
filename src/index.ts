@@ -4,12 +4,12 @@ import mutationCallback from './mutation-callback';
 /**
  * Type definition for the captions receiver function.
  */
-interface Captions {
+export interface Captions {
     session: string;
     activeSpeaker: string;
     talkContent: string;
 }
-export type captionsReceiver = (v: {session: string, activeSpeaker: string, talkContent:  string}) => void;
+export type captionsReceiver = (v: Captions) => void;
 /**
  * Type definition for the GetCaptionsInterface function.
  * @typedef {Function} GetCaptionsInterface
@@ -26,6 +26,7 @@ const waitForObserving = (receiver: captionsReceiver) => {
     const targetElement = document.querySelector(googleMeetCaptionsClassName);
     if (targetElement) {
         const observer = new MutationObserver(() => {
+            console.log('mutation observed');
             mutationCallback(receiver);
         });
         observer.observe(targetElement, {
@@ -34,7 +35,7 @@ const waitForObserving = (receiver: captionsReceiver) => {
             characterData: true
         });
     } else {
-        setTimeout(waitForObserving, 1000);
+        setTimeout(() => {waitForObserving(receiver)}, 1000);
     }
 }
 
@@ -45,9 +46,19 @@ const waitForObserving = (receiver: captionsReceiver) => {
  * @param {captionsReceiver} receiver - The function to call when captions are received.
  */
 export const getCaptions : GetCaptionsInterface = (cls = googleMeetCaptionsClassName, receiver) => {
-    document.addEventListener('load', () => {
-        waitForObserving(receiver)
-    });
+    const readyGetCaptions = () => {
+        window.requestAnimationFrame(() => {
+            if (document.readyState === 'complete') {
+                console.log('document complete');
+                waitForObserving(receiver);
+            } else {
+                readyGetCaptions()
+            }
+        })
+    };
+
+    readyGetCaptions();
+
 }
 
 export default getCaptions;

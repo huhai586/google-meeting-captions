@@ -73,10 +73,14 @@ const $2266d2c6dd11209a$var$mutationCallback = (receiver)=>{
 var $2266d2c6dd11209a$export$2e2bcd8739ae039 = $2266d2c6dd11209a$var$mutationCallback;
 
 
-const $882b6d93070905b3$var$waitForObserving = (receiver)=>{
+/**
+ * Waits for the target element to be available and starts observing it for mutations.
+ * @param {captionsReceiver} receiver - The function to call when captions are received.
+ */ const $882b6d93070905b3$var$waitForObserving = (receiver)=>{
     const targetElement = document.querySelector((0, $3307b9ff306c97ee$export$9cc74cffd28a9d02));
     if (targetElement) {
         const observer = new MutationObserver(()=>{
+            console.log('mutation observed');
             (0, $2266d2c6dd11209a$export$2e2bcd8739ae039)(receiver);
         });
         observer.observe(targetElement, {
@@ -84,12 +88,20 @@ const $882b6d93070905b3$var$waitForObserving = (receiver)=>{
             subtree: true,
             characterData: true
         });
-    } else setTimeout($882b6d93070905b3$var$waitForObserving, 1000);
+    } else setTimeout(()=>{
+        $882b6d93070905b3$var$waitForObserving(receiver);
+    }, 1000);
 };
 const $882b6d93070905b3$export$e6f842301282c7f2 = (cls = (0, $3307b9ff306c97ee$export$9cc74cffd28a9d02), receiver)=>{
-    document.addEventListener('load', ()=>{
-        $882b6d93070905b3$var$waitForObserving(receiver);
-    });
+    const readyGetCaptions = ()=>{
+        window.requestAnimationFrame(()=>{
+            if (document.readyState === 'complete') {
+                console.log('document complete');
+                $882b6d93070905b3$var$waitForObserving(receiver);
+            } else readyGetCaptions();
+        });
+    };
+    readyGetCaptions();
 };
 var $882b6d93070905b3$export$2e2bcd8739ae039 = $882b6d93070905b3$export$e6f842301282c7f2;
 
