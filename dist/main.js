@@ -48,6 +48,8 @@ const $2266d2c6dd11209a$var$recordSpan = ()=>{
 };
 const $2266d2c6dd11209a$var$getSessionSpeakContent = (sessionId)=>{
     const texts = $2266d2c6dd11209a$var$sessionIdSpanHash[sessionId].join(" ");
+    const spans = $2266d2c6dd11209a$var$getCaptionsTextContainer().querySelectorAll('span');
+    console.log('spans length', spans.length);
     console.warn('current dialog', texts);
     return texts;
 };
