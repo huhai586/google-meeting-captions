@@ -1,5 +1,6 @@
 import {googleMeetCaptionsClassName} from './constant';
 import {captionsReceiver} from "./index";
+import debounce from './debounce';
 
 const getCaptionsContainer = () => document.querySelector(googleMeetCaptionsClassName);
 const getWhoIsSpeaking = () => getCaptionsContainer().childNodes?.[0]?.childNodes[0]?.textContent;
@@ -28,7 +29,11 @@ const addSpanTag = (sessionId) => {
 const captureCaptions = () => {
     getAllSpan().forEach(span => {
         const sessionId = span.getAttribute('data-session-id');
+        const isIgnored = span.getAttribute('data-ignored');
         const sessionIndex = span.getAttribute('data-session-index');
+        if (isIgnored) {
+            return;
+        }
         if (sessionIdSpanHash[sessionId]) {
             sessionIdSpanHash[sessionId][sessionIndex] = span.textContent;
         } else {
@@ -43,19 +48,21 @@ const getSessionSpeakContent = (sessionId) => {
 };
 
 const markSpanShouldBeIgnored = () => {
-     let moveIndex = null;
-    const currentSessionCaptions = getSessionSpeakContent(sessionInfo.sessionId);
+    console.log('markSpanShouldBeIgnored')
+     let moveIndexTo = null;
+    const currentSessionCaptions = getSessionSpeakContent(sessionInfo.sessionId) as string;
     const allSpanArr = getAllSpan();
     // @ts-ignore
     allSpanArr.forEach((span, index) => {
         const texts = allSpanArr.slice(0, index + 1).map(span => span.textContent).join(" ");
-        if (currentSessionCaptions.index.infexOf(texts) !== -1) {
-            moveIndex = index;
+        if (currentSessionCaptions.indexOf(texts) !== -1) {
+            moveIndexTo = index;
         }
     })
-    if (moveIndex !== null) {
+    console.log('moveIndexTo', moveIndexTo)
+    if (moveIndexTo !== null) {
         allSpanArr.forEach((span, index) => {
-            if (index <= moveIndex) {
+            if (index <= moveIndexTo) {
                 span.setAttribute('data-ignored', 'true');
             }
         })
@@ -77,16 +84,13 @@ const mutationCallback = (receiver: captionsReceiver) => {
         sessionIdSpanHash[sessionInfo.sessionId] = [];
     }
 
-    const currentSessionCaptions = getSessionSpeakContent(sessionInfo.sessionId);
-    // 检查span是否需要忽略
-    const isAllSpanDontHaveSessionId = getAllSpan().every(span => !span.hasAttribute('data-session-id'));
+    // const currentSessionCaptions = getSessionSpeakContent(sessionInfo.sessionId);
+    // // 检查span是否需要忽略
+    // const isAllSpanDontHaveSessionId = getAllSpan().every(span => !span.hasAttribute('data-session-id'));
+    // console.log('isAllSpanDontHaveSessionId', isAllSpanDontHaveSessionId)
     //
-    if (isAllSpanDontHaveSessionId && !!currentSessionCaptions) {
-        // 说明发生了resize导致所有span都被reset了
-        // find the span should be ignored
-        markSpanShouldBeIgnored();
+    markSpanShouldBeIgnored();
 
-    }
     addSpanTag(sessionInfo.sessionId)
     captureCaptions();
 
@@ -96,4 +100,4 @@ const mutationCallback = (receiver: captionsReceiver) => {
         talkContent: getSessionSpeakContent(sessionInfo.sessionId)
     })};
 
-export default mutationCallback;
+export default debounce(mutationCallback, 300);
