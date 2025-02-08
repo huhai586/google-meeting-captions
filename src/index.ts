@@ -20,10 +20,11 @@ type GetCaptionsInterface = (cls: string, receiver: captionsReceiver) => void;
 
 /**
  * Waits for the target element to be available and starts observing it for mutations.
+ * @param cls
  * @param {captionsReceiver} receiver - The function to call when captions are received.
  */
-const waitForObserving = (receiver: captionsReceiver) => {
-    const targetElement = document.querySelector(googleMeetCaptionsClassName);
+const waitForObserving = (cls: string,receiver: captionsReceiver) => {
+    const targetElement = document.querySelector(cls);
     if (targetElement) {
         const observer = new MutationObserver(() => {
             console.log('mutation observed');
@@ -35,22 +36,21 @@ const waitForObserving = (receiver: captionsReceiver) => {
             characterData: true
         });
     } else {
-        setTimeout(() => {waitForObserving(receiver)}, 1000);
+        setTimeout(() => {waitForObserving(cls, receiver)}, 1000);
     }
 }
 
 /**
  * Type definition for the GetCaptionsInterface function.
- * @typedef {Function} GetCaptionsInterface
  * @param {string} cls - The class name to observe.
  * @param {captionsReceiver} receiver - The function to call when captions are received.
  */
-export const getCaptions : GetCaptionsInterface = (cls = googleMeetCaptionsClassName, receiver) => {
+export const getCaptions : GetCaptionsInterface = (cls: string = googleMeetCaptionsClassName, receiver: captionsReceiver) => {
     const readyGetCaptions = () => {
         window.requestAnimationFrame(() => {
             if (document.readyState === 'complete') {
                 console.log('document complete');
-                waitForObserving(receiver);
+                waitForObserving(cls, receiver);
             } else {
                 readyGetCaptions()
             }
