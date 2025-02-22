@@ -18,13 +18,24 @@ export type captionsReceiver = (v: Captions) => void;
  */
 type GetCaptionsInterface = (cls: string, receiver: captionsReceiver) => void;
 
+
+
+const getCaptionLang = () => {
+    const langs = {
+        'zh-cn': '字幕',
+        'en': 'Captions',
+    }
+    const lang = document.querySelector('html').lang?.toLowerCase();
+    return langs[lang] || 'Captions';
+}
+
 /**
  * Waits for the target element to be available and starts observing it for mutations.
  * @param cls
  * @param {captionsReceiver} receiver - The function to call when captions are received.
  */
 const waitForObserving = (cls: string,receiver: captionsReceiver) => {
-    const targetElement = document.querySelector(cls);
+    const targetElement = document.querySelector(cls || 'div[aria-label="' + getCaptionLang() + '"]');
     if (targetElement) {
         const observer = new MutationObserver(() => {
             console.log('mutation observed');
@@ -45,7 +56,8 @@ const waitForObserving = (cls: string,receiver: captionsReceiver) => {
  * @param {string} cls - The class name to observe.
  * @param {captionsReceiver} receiver - The function to call when captions are received.
  */
-export const getCaptions : GetCaptionsInterface = (cls: string = googleMeetCaptionsClassName, receiver: captionsReceiver) => {
+export const getCaptions : GetCaptionsInterface = (cls: string, receiver: captionsReceiver) => {
+
     const readyGetCaptions = () => {
         window.requestAnimationFrame(() => {
             if (document.readyState === 'complete') {

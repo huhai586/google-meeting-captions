@@ -14,6 +14,17 @@ $parcel$export(module.exports, "default", () => $882b6d93070905b3$export$2e2bcd8
 const $3307b9ff306c97ee$export$9cc74cffd28a9d02 = '.uYs2ee';
 
 
+const $899d75221b921f73$var$debounce = (fn, delay)=>{
+    let timer;
+    return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(()=>{
+            fn(...args);
+        }, delay);
+    };
+};
+var $899d75221b921f73$export$2e2bcd8739ae039 = $899d75221b921f73$var$debounce;
+
 
 const $2266d2c6dd11209a$var$getCaptionsContainer = ()=>document.querySelector((0, $3307b9ff306c97ee$export$9cc74cffd28a9d02));
 const $2266d2c6dd11209a$var$getWhoIsSpeaking = ()=>$2266d2c6dd11209a$var$getCaptionsContainer().childNodes?.[0]?.childNodes[0]?.textContent;
@@ -39,7 +50,9 @@ const $2266d2c6dd11209a$var$addSpanTag = (sessionId)=>{
 const $2266d2c6dd11209a$var$captureCaptions = ()=>{
     $2266d2c6dd11209a$var$getAllSpan().forEach((span)=>{
         const sessionId = span.getAttribute('data-session-id');
+        const isIgnored = span.getAttribute('data-ignored');
         const sessionIndex = span.getAttribute('data-session-index');
+        if (isIgnored) return;
         if ($2266d2c6dd11209a$var$sessionIdSpanHash[sessionId]) $2266d2c6dd11209a$var$sessionIdSpanHash[sessionId][sessionIndex] = span.textContent;
         else {
             $2266d2c6dd11209a$var$sessionIdSpanHash[sessionId] = [];
@@ -52,20 +65,21 @@ const $2266d2c6dd11209a$var$getSessionSpeakContent = (sessionId)=>{
     return texts;
 };
 const $2266d2c6dd11209a$var$markSpanShouldBeIgnored = ()=>{
-    let moveIndex = null;
+    console.log('markSpanShouldBeIgnored');
+    let moveIndexTo = null;
     const currentSessionCaptions = $2266d2c6dd11209a$var$getSessionSpeakContent($2266d2c6dd11209a$var$sessionInfo.sessionId);
     const allSpanArr = $2266d2c6dd11209a$var$getAllSpan();
     // @ts-ignore
     allSpanArr.forEach((span, index)=>{
         const texts = allSpanArr.slice(0, index + 1).map((span)=>span.textContent).join(" ");
-        if (currentSessionCaptions.index.infexOf(texts) !== -1) moveIndex = index;
+        if (currentSessionCaptions.indexOf(texts) !== -1) moveIndexTo = index;
     });
-    if (moveIndex !== null) allSpanArr.forEach((span, index)=>{
-        if (index <= moveIndex) span.setAttribute('data-ignored', 'true');
+    console.log('moveIndexTo', moveIndexTo);
+    if (moveIndexTo !== null) allSpanArr.forEach((span, index)=>{
+        if (index <= moveIndexTo) span.setAttribute('data-ignored', 'true');
     });
 };
 const $2266d2c6dd11209a$var$mutationCallback = (receiver)=>{
-    console.warn('mutation observed');
     const speakContent = $2266d2c6dd11209a$var$getSpeakContent();
     const isNewOneSpeaking = $2266d2c6dd11209a$var$getWhoIsSpeaking() !== $2266d2c6dd11209a$var$whoIsSpeaking;
     $2266d2c6dd11209a$var$whoIsSpeaking = $2266d2c6dd11209a$var$getWhoIsSpeaking();
@@ -75,12 +89,11 @@ const $2266d2c6dd11209a$var$mutationCallback = (receiver)=>{
         $2266d2c6dd11209a$var$sessionInfo.sessionIndex = 0; // reset session index
         $2266d2c6dd11209a$var$sessionIdSpanHash[$2266d2c6dd11209a$var$sessionInfo.sessionId] = [];
     }
-    const currentSessionCaptions = $2266d2c6dd11209a$var$getSessionSpeakContent($2266d2c6dd11209a$var$sessionInfo.sessionId);
-    // 检查span是否需要忽略
-    const isAllSpanDontHaveSessionId = $2266d2c6dd11209a$var$getAllSpan().every((span)=>!span.hasAttribute('data-session-id'));
+    // const currentSessionCaptions = getSessionSpeakContent(sessionInfo.sessionId);
+    // // 检查span是否需要忽略
+    // const isAllSpanDontHaveSessionId = getAllSpan().every(span => !span.hasAttribute('data-session-id'));
+    // console.log('isAllSpanDontHaveSessionId', isAllSpanDontHaveSessionId)
     //
-    if (isAllSpanDontHaveSessionId && !!currentSessionCaptions) // 说明发生了resize导致所有span都被reset了
-    // find the span should be ignored
     $2266d2c6dd11209a$var$markSpanShouldBeIgnored();
     $2266d2c6dd11209a$var$addSpanTag($2266d2c6dd11209a$var$sessionInfo.sessionId);
     $2266d2c6dd11209a$var$captureCaptions();
@@ -90,15 +103,23 @@ const $2266d2c6dd11209a$var$mutationCallback = (receiver)=>{
         talkContent: $2266d2c6dd11209a$var$getSessionSpeakContent($2266d2c6dd11209a$var$sessionInfo.sessionId)
     });
 };
-var $2266d2c6dd11209a$export$2e2bcd8739ae039 = $2266d2c6dd11209a$var$mutationCallback;
+var $2266d2c6dd11209a$export$2e2bcd8739ae039 = (0, $899d75221b921f73$export$2e2bcd8739ae039)($2266d2c6dd11209a$var$mutationCallback, 300);
 
 
+const $882b6d93070905b3$var$getCaptionLang = ()=>{
+    const langs = {
+        'zh-cn': "\u5B57\u5E55",
+        'en': 'Captions'
+    };
+    const lang = document.querySelector('html').lang?.toLowerCase();
+    return langs[lang] || 'Captions';
+};
 /**
  * Waits for the target element to be available and starts observing it for mutations.
  * @param cls
  * @param {captionsReceiver} receiver - The function to call when captions are received.
  */ const $882b6d93070905b3$var$waitForObserving = (cls, receiver)=>{
-    const targetElement = document.querySelector(cls);
+    const targetElement = document.querySelector(cls || 'div[aria-label="' + $882b6d93070905b3$var$getCaptionLang() + '"]');
     if (targetElement) {
         const observer = new MutationObserver(()=>{
             console.log('mutation observed');
@@ -113,7 +134,7 @@ var $2266d2c6dd11209a$export$2e2bcd8739ae039 = $2266d2c6dd11209a$var$mutationCal
         $882b6d93070905b3$var$waitForObserving(cls, receiver);
     }, 1000);
 };
-const $882b6d93070905b3$export$e6f842301282c7f2 = (cls = (0, $3307b9ff306c97ee$export$9cc74cffd28a9d02), receiver)=>{
+const $882b6d93070905b3$export$e6f842301282c7f2 = (cls, receiver)=>{
     const readyGetCaptions = ()=>{
         window.requestAnimationFrame(()=>{
             if (document.readyState === 'complete') {

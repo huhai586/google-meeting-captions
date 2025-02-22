@@ -69,7 +69,6 @@ const markSpanShouldBeIgnored = () => {
     }
 }
 const mutationCallback = (receiver: captionsReceiver) => {
-    console.warn('mutation observed');
     const speakContent = getSpeakContent();
     const isNewOneSpeaking = getWhoIsSpeaking() !== whoIsSpeaking;
     whoIsSpeaking = getWhoIsSpeaking();
