@@ -14,6 +14,7 @@ export type captionsReceiver = (v: Captions) => void;
  * @param {captionsReceiver} receiver - The function to call when captions are received.
  */
 type GetCaptionsInterface = (cls: string, receiver: captionsReceiver) => void;
+export const getCaptionsContainer: () => Element;
 /**
  * Type definition for the GetCaptionsInterface function.
  * @param {string} cls - The class name to observe.

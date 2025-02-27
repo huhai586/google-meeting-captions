@@ -1,4 +1,3 @@
-import {googleMeetCaptionsClassName} from './constant';
 import mutationCallback from './mutation-callback';
 
 /**
@@ -29,13 +28,17 @@ const getCaptionLang = () => {
     return langs[lang] || 'Captions';
 }
 
+export const getCaptionsContainer = () => {
+    return document.querySelector('div[aria-label="' + getCaptionLang() + '"]');
+}
+
 /**
  * Waits for the target element to be available and starts observing it for mutations.
  * @param cls
  * @param {captionsReceiver} receiver - The function to call when captions are received.
  */
 const waitForObserving = (cls: string,receiver: captionsReceiver) => {
-    const targetElement = document.querySelector(cls || 'div[aria-label="' + getCaptionLang() + '"]');
+    const targetElement = getCaptionsContainer();
     if (targetElement) {
         const observer = new MutationObserver(() => {
             console.log('mutation observed');
