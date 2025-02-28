@@ -17,19 +17,18 @@ export type captionsReceiver = (v: Captions) => void;
  */
 type GetCaptionsInterface = (cls: string, receiver: captionsReceiver) => void;
 
-
-
 const getCaptionLang = () => {
-    const langs = {
+    const langs: Record<string, string> = {
         'zh-cn': '字幕',
         'en': 'Captions',
     }
-    const lang = document.querySelector('html').lang?.toLowerCase();
+    const htmlElement = document.querySelector('html');
+    const lang = htmlElement?.lang?.toLowerCase() || 'en';
     return langs[lang] || 'Captions';
 }
 
-export const getCaptionsContainer = () => {
-    return document.querySelector('div[aria-label="' + getCaptionLang() + '"]');
+export const getCaptionsContainer = (): HTMLElement | null => {
+    return document.querySelector<HTMLElement>('div[aria-label="' + getCaptionLang() + '"]');
 }
 
 /**
@@ -37,7 +36,7 @@ export const getCaptionsContainer = () => {
  * @param cls
  * @param {captionsReceiver} receiver - The function to call when captions are received.
  */
-const waitForObserving = (cls: string,receiver: captionsReceiver) => {
+const waitForObserving = (cls: string, receiver: captionsReceiver) => {
     const targetElement = getCaptionsContainer();
     if (targetElement) {
         const observer = new MutationObserver(() => {
@@ -59,8 +58,7 @@ const waitForObserving = (cls: string,receiver: captionsReceiver) => {
  * @param {string} cls - The class name to observe.
  * @param {captionsReceiver} receiver - The function to call when captions are received.
  */
-export const getCaptions : GetCaptionsInterface = (cls: string, receiver: captionsReceiver) => {
-
+export const getCaptions: GetCaptionsInterface = (cls: string, receiver: captionsReceiver) => {
     const readyGetCaptions = () => {
         window.requestAnimationFrame(() => {
             if (document.readyState === 'complete') {
@@ -73,7 +71,6 @@ export const getCaptions : GetCaptionsInterface = (cls: string, receiver: captio
     };
 
     readyGetCaptions();
-
 }
 
 export default getCaptions;

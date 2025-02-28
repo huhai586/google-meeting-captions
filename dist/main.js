@@ -18,35 +18,56 @@ const $899d75221b921f73$var$debounce = (fn, delay)=>{
     return function(...args) {
         clearTimeout(timer);
         timer = setTimeout(()=>{
-            fn(...args);
+            fn.apply(this, args);
         }, delay);
     };
 };
 var $899d75221b921f73$export$2e2bcd8739ae039 = $899d75221b921f73$var$debounce;
 
 
-const $2266d2c6dd11209a$var$getWhoIsSpeaking = ()=>(0, $882b6d93070905b3$export$f3730088e840d53e)().childNodes?.[0]?.childNodes[0]?.textContent;
-const $2266d2c6dd11209a$var$getSpeakContent = ()=>(0, $882b6d93070905b3$export$f3730088e840d53e)().childNodes?.[0]?.childNodes[1]?.textContent;
-let $2266d2c6dd11209a$var$whoIsSpeaking = '';
-const $2266d2c6dd11209a$var$sessionIdSpanHash = {};
-const $2266d2c6dd11209a$var$sessionInfo = {
-    sessionId: '',
-    sessionIndex: 0
+const $2266d2c6dd11209a$var$getAllCaptionDivs = ()=>{
+    const container = (0, $882b6d93070905b3$export$f3730088e840d53e)();
+    if (!container) return [];
+    return Array.from(container.childNodes);
+};
+const $2266d2c6dd11209a$var$extractCaptionInfo = (div)=>{
+    if (!div.childNodes || div.childNodes.length < 2) return {
+        speaker: '',
+        content: ''
+    };
+    const speakerNode = div.childNodes[0];
+    const contentNode = div.childNodes[1];
+    if (!(speakerNode instanceof HTMLElement) || !(contentNode instanceof HTMLElement)) return {
+        speaker: '',
+        content: ''
+    };
+    return {
+        speaker: speakerNode.textContent || '',
+        content: contentNode.textContent || ''
+    };
+};
+const $2266d2c6dd11209a$var$speakerSessions = {};
+const $2266d2c6dd11209a$var$getOrCreateSession = (speaker, content)=>{
+    if (!$2266d2c6dd11209a$var$speakerSessions[speaker] || content.length < $2266d2c6dd11209a$var$speakerSessions[speaker].lastContent.length) // Create new session if speaker is new or content length decreased (indicating new speech)
+    $2266d2c6dd11209a$var$speakerSessions[speaker] = {
+        sessionId: String(new Date().getTime()),
+        lastContent: content
+    };
+    else // Update existing session's content
+    $2266d2c6dd11209a$var$speakerSessions[speaker].lastContent = content;
+    return $2266d2c6dd11209a$var$speakerSessions[speaker].sessionId;
 };
 const $2266d2c6dd11209a$var$mutationCallback = (receiver)=>{
-    const speakContent = $2266d2c6dd11209a$var$getSpeakContent();
-    const isNewOneSpeaking = $2266d2c6dd11209a$var$getWhoIsSpeaking() !== $2266d2c6dd11209a$var$whoIsSpeaking;
-    $2266d2c6dd11209a$var$whoIsSpeaking = $2266d2c6dd11209a$var$getWhoIsSpeaking();
-    if (!speakContent) return;
-    if (isNewOneSpeaking) {
-        $2266d2c6dd11209a$var$sessionInfo.sessionId = String(new Date().getTime()); // reset session id
-        $2266d2c6dd11209a$var$sessionInfo.sessionIndex = 0; // reset session index
-        $2266d2c6dd11209a$var$sessionIdSpanHash[$2266d2c6dd11209a$var$sessionInfo.sessionId] = [];
-    }
-    receiver({
-        session: $2266d2c6dd11209a$var$sessionInfo.sessionId,
-        activeSpeaker: $2266d2c6dd11209a$var$whoIsSpeaking,
-        talkContent: speakContent
+    const captionDivs = $2266d2c6dd11209a$var$getAllCaptionDivs();
+    captionDivs.forEach((div)=>{
+        const { speaker: speaker, content: content } = $2266d2c6dd11209a$var$extractCaptionInfo(div);
+        if (!speaker || !content) return;
+        const sessionId = $2266d2c6dd11209a$var$getOrCreateSession(speaker, content);
+        receiver({
+            session: sessionId,
+            activeSpeaker: speaker,
+            talkContent: content
+        });
     });
 };
 var $2266d2c6dd11209a$export$2e2bcd8739ae039 = (0, $899d75221b921f73$export$2e2bcd8739ae039)($2266d2c6dd11209a$var$mutationCallback, 300);
@@ -57,7 +78,8 @@ const $882b6d93070905b3$var$getCaptionLang = ()=>{
         'zh-cn': "\u5B57\u5E55",
         'en': 'Captions'
     };
-    const lang = document.querySelector('html').lang?.toLowerCase();
+    const htmlElement = document.querySelector('html');
+    const lang = htmlElement?.lang?.toLowerCase() || 'en';
     return langs[lang] || 'Captions';
 };
 const $882b6d93070905b3$export$f3730088e840d53e = ()=>{
