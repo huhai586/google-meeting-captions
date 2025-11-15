@@ -39,9 +39,8 @@ export const getCaptionsContainer = (): HTMLElement | null => {
 const waitForObserving = (cls: string, receiver: captionsReceiver) => {
     const targetElement = getCaptionsContainer();
     if (targetElement) {
-        const observer = new MutationObserver(() => {
-            console.log('mutation observed');
-            mutationCallback(receiver);
+        const observer = new MutationObserver((mutations) => {
+            mutationCallback(mutations, receiver);
         });
         observer.observe(targetElement, {
             childList: true,
