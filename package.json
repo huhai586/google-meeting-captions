@@ -1,6 +1,6 @@
 {
   "name": "google-meeting-captions-resolver",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "a tool to get google meeting captions for chrome extension",
   "scripts": {
     "watch": "parcel watch",
@@ -25,8 +25,8 @@
   },
   "homepage": "https://github.com/huhai586/google-meeting-captions#readme",
   "devDependencies": {
-    "@parcel/packager-ts": "2.13.3",
-    "@parcel/transformer-typescript-types": "2.13.3",
+    "@parcel/packager-ts": "^2.13.3",
+    "@parcel/transformer-typescript-types": "^2.16.1",
     "parcel": "^2.13.3",
     "typescript": ">=3.0.0"
   }

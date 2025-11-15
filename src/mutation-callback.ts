@@ -3,24 +3,8 @@ import {captionsReceiver} from "./index";
 // 从字幕 div 中提取发言人和内容
 // DOM 结构：<div aria-label="字幕"> <div> <div>人名</div> <div>内容</div> </div> </div>
 const extractCaptionInfo = (wrapperDiv: Node) => {
-    // wrapperDiv 是包装 div，它的第一个子元素才是真正包含人名和内容的容器
-    if (!wrapperDiv.childNodes || wrapperDiv.childNodes.length === 0) {
-        return { speaker: '', content: '' };
-    }
-    
-    // 获取第一个子元素（包含人名和内容的容器）
-    const containerDiv = wrapperDiv.childNodes[0];
-    
-    if (!containerDiv.childNodes || containerDiv.childNodes.length < 2) {
-        return { speaker: '', content: '' };
-    }
-    
-    const speakerNode = containerDiv.childNodes[0];  // 第1个div：人名
-    const contentNode = containerDiv.childNodes[1];  // 第2个div：内容
-    
-    if (!(speakerNode instanceof HTMLElement) || !(contentNode instanceof HTMLElement)) {
-        return { speaker: '', content: '' };
-    }
+    const speakerNode = wrapperDiv?.childNodes?.[0];  // 第1个div：人名
+    const contentNode = wrapperDiv?.childNodes?.[1];  // 第2个div：内容
 
     return {
         speaker: speakerNode.textContent || '',
