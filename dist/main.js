@@ -46,23 +46,37 @@ const $2266d2c6dd11209a$var$extractCaptionInfo = (div)=>{
         content: contentNode.textContent || ''
     };
 };
-const $2266d2c6dd11209a$var$speakerSessions = {};
-const $2266d2c6dd11209a$var$getOrCreateSession = (speaker, content)=>{
-    if (!$2266d2c6dd11209a$var$speakerSessions[speaker] || content.length < $2266d2c6dd11209a$var$speakerSessions[speaker].lastContent.length) // Create new session if speaker is new or content length decreased (indicating new speech)
-    $2266d2c6dd11209a$var$speakerSessions[speaker] = {
+let $2266d2c6dd11209a$var$speakerSessions = [];
+const $2266d2c6dd11209a$var$getOrCreateSession = (div, speaker, content)=>{
+    // Try to find existing session for this div
+    const existingSession = $2266d2c6dd11209a$var$speakerSessions.find((session)=>session.divElement === div);
+    if (existingSession) {
+        // Update existing session's content
+        existingSession.lastContent = content;
+        return existingSession.sessionId;
+    }
+    // Create new session
+    const newSession = {
         sessionId: String(new Date().getTime()),
-        lastContent: content
+        lastContent: content,
+        divElement: div
     };
-    else // Update existing session's content
-    $2266d2c6dd11209a$var$speakerSessions[speaker].lastContent = content;
-    return $2266d2c6dd11209a$var$speakerSessions[speaker].sessionId;
+    $2266d2c6dd11209a$var$speakerSessions.push(newSession);
+    console.log('create new session', {
+        speaker: speaker,
+        content: content
+    });
+    // Clean up old sessions that are no longer in the DOM
+    const container = (0, $882b6d93070905b3$export$f3730088e840d53e)();
+    if (container) $2266d2c6dd11209a$var$speakerSessions = $2266d2c6dd11209a$var$speakerSessions.filter((session)=>container.contains(session.divElement));
+    return newSession.sessionId;
 };
 const $2266d2c6dd11209a$var$mutationCallback = (receiver)=>{
     const captionDivs = $2266d2c6dd11209a$var$getAllCaptionDivs();
     captionDivs.forEach((div)=>{
         const { speaker: speaker, content: content } = $2266d2c6dd11209a$var$extractCaptionInfo(div);
         if (!speaker || !content) return;
-        const sessionId = $2266d2c6dd11209a$var$getOrCreateSession(speaker, content);
+        const sessionId = $2266d2c6dd11209a$var$getOrCreateSession(div, speaker, content);
         receiver({
             session: sessionId,
             activeSpeaker: speaker,

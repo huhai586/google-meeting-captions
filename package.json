@@ -1,6 +1,6 @@
 {
   "name": "google-meeting-captions-resolver",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "a tool to get google meeting captions for chrome extension",
   "scripts": {
     "watch": "parcel watch",

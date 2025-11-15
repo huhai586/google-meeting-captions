@@ -28,22 +28,40 @@ const extractCaptionInfo = (div: ChildNode) => {
 interface SpeakerSession {
     sessionId: string;
     lastContent: string;
+    divElement: ChildNode;
 }
 
-const speakerSessions: Record<string, SpeakerSession> = {};
+let speakerSessions: SpeakerSession[] = [];
 
-const getOrCreateSession = (speaker: string, content: string): string => {
-    if (!speakerSessions[speaker] || content.length < speakerSessions[speaker].lastContent.length) {
-        // Create new session if speaker is new or content length decreased (indicating new speech)
-        speakerSessions[speaker] = {
-            sessionId: String(new Date().getTime()),
-            lastContent: content
-        };
-    } else {
+const getOrCreateSession = (div: ChildNode, speaker: string, content: string): string => {
+    // Try to find existing session for this div
+    const existingSession = speakerSessions.find(session => session.divElement === div);
+    
+    if (existingSession) {
         // Update existing session's content
-        speakerSessions[speaker].lastContent = content;
+        existingSession.lastContent = content;
+        return existingSession.sessionId;
     }
-    return speakerSessions[speaker].sessionId;
+    
+    // Create new session
+    const newSession = {
+        sessionId: String(new Date().getTime()),
+        lastContent: content,
+        divElement: div
+    };
+    
+    speakerSessions.push(newSession);
+    console.log('create new session', { speaker, content });
+    
+    // Clean up old sessions that are no longer in the DOM
+    const container = getCaptionsContainer();
+    if (container) {
+        speakerSessions = speakerSessions.filter(session => 
+            container.contains(session.divElement)
+        );
+    }
+    
+    return newSession.sessionId;
 };
 
 const mutationCallback = (receiver: captionsReceiver) => {
@@ -56,7 +74,7 @@ const mutationCallback = (receiver: captionsReceiver) => {
             return;
         }
 
-        const sessionId = getOrCreateSession(speaker, content);
+        const sessionId = getOrCreateSession(div, speaker, content);
 
         receiver({
             session: sessionId,

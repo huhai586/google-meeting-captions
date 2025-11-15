@@ -6,7 +6,7 @@
 117C:\webstorm_projects\google-meeting-captions-resolver\node_modules\caniuse-lite\data\features\css-deviceadaptation.js133804678892360000 0
 83C:\webstorm_projects\google-meeting-captions-resolver\node_modules\type-fest\source133804679149087826 1
 109C:\webstorm_projects\google-meeting-captions-resolver\node_modules\lightningcss\node\browserslistToTargets.js133804678947920000 0
-66C:\webstorm_projects\google-meeting-captions-resolver\package.json133852235509919207 0
+66C:\webstorm_projects\google-meeting-captions-resolver\package.json133852269437260013 0
 103C:\webstorm_projects\google-meeting-captions-resolver\node_modules\@parcel\package-manager\src\index.js133804678880230000 0
 77C:\webstorm_projects\google-meeting-captions-resolver\node_modules\base-x\src133804679145808575 1
 105C:\webstorm_projects\google-meeting-captions-resolver\node_modules\@parcel\transformer-image\package.json133804678921440000 0
@@ -39,7 +39,7 @@
 86C:\webstorm_projects\google-meeting-captions-resolver\node_modules\msgpackr\index.d.ts133804678876580000 0
 115C:\webstorm_projects\google-meeting-captions-resolver\node_modules\caniuse-lite\data\features\unhandledrejection.js133804678892360000 0
 79C:\webstorm_projects\google-meeting-captions-resolver\node_modules\caniuse-lite133804679143266740 1
-59C:\webstorm_projects\google-meeting-captions-resolver\.idea133851390472519540 1
+59C:\webstorm_projects\google-meeting-captions-resolver\.idea133853125959670726 1
 104C:\webstorm_projects\google-meeting-captions-resolver\node_modules\typescript\lib\lib.es2017.object.d.ts133805141192000000 0
 97C:\webstorm_projects\google-meeting-captions-resolver\node_modules\@swc\helpers\src\_inherits.mjs133804678947950000 0
 98C:\webstorm_projects\google-meeting-captions-resolver\node_modules\@parcel\core\lib\Environment.js133804678869200000 0
@@ -52,7 +52,7 @@
 93C:\webstorm_projects\google-meeting-captions-resolver\node_modules\domutils\lib\legacy.js.map133804679106840000 0
 83C:\webstorm_projects\google-meeting-captions-resolver\node_modules\term-size\vendor133804679148806268 1
 63C:\webstorm_projects\google-meeting-captions-resolver\.parcelrc133852237188251970 0
-58C:\webstorm_projects\google-meeting-captions-resolver\dist133852240107326060 1
+58C:\webstorm_projects\google-meeting-captions-resolver\dist133852267589165046 1
 101C:\webstorm_projects\google-meeting-captions-resolver\node_modules\utility-types\dist\mapped-types.js133804678947780000 0
 107C:\webstorm_projects\google-meeting-captions-resolver\node_modules\caniuse-lite\data\features\use-strict.js133804678892360000 0
 75C:\webstorm_projects\google-meeting-captions-resolver\node_modules\escalade133804679143512973 1
@@ -79,7 +79,7 @@
 92C:\webstorm_projects\google-meeting-captions-resolver\node_modules\posthtml-parser\readme.md133804678953860000 0
 73C:\webstorm_projects\google-meeting-captions-resolver\node_modules\base-x133804679143047005 1
 98C:\webstorm_projects\google-meeting-captions-resolver\node_modules\caniuse-lite\data\regions\MR.js133804678892360000 0
-78C:\webstorm_projects\google-meeting-captions-resolver\src\mutation-callback.ts133852239975255394 0
+78C:\webstorm_projects\google-meeting-captions-resolver\src\mutation-callback.ts133852267117756103 0
 102C:\webstorm_projects\google-meeting-captions-resolver\node_modules\typescript\lib\lib.esnext.intl.d.ts133805141192000000 0
 114C:\webstorm_projects\google-meeting-captions-resolver\node_modules\entities\lib\esm\generated\decode-data-xml.d.ts133804679106520000 0
 110C:\webstorm_projects\google-meeting-captions-resolver\node_modules\typescript\lib\lib.es2017.sharedmemory.d.ts133805141192000000 0
@@ -330,7 +330,7 @@
 102C:\webstorm_projects\google-meeting-captions-resolver\node_modules\type-fest\source\literal-union.d.ts133297490477470000 0
 116C:\webstorm_projects\google-meeting-captions-resolver\node_modules\@swc\helpers\_\_class_name_tdz_error\package.json133804678947950000 0
 102C:\webstorm_projects\google-meeting-captions-resolver\node_modules\typescript\lib\lib.es2016.intl.d.ts133805141192000000 0
-66C:\webstorm_projects\google-meeting-captions-resolver\dist\main.js133852240107183173 0
+66C:\webstorm_projects\google-meeting-captions-resolver\dist\main.js133852267589117325 0
 98C:\webstorm_projects\google-meeting-captions-resolver\node_modules\ordered-binary\rollup.config.js133804678955270000 0
 102C:\webstorm_projects\google-meeting-captions-resolver\node_modules\caniuse-lite\data\features\const.js133804678892360000 0
 94C:\webstorm_projects\google-meeting-captions-resolver\node_modules\lightningcss-win32-x64-msvc133804679143683679 1
@@ -4533,10 +4533,10 @@
 80C:\webstorm_projects\google-meeting-captions-resolver\node_modules\.bin\tsserver133805141259142862 0
 94C:\webstorm_projects\google-meeting-captions-resolver\node_modules\.bin\update-browserslist-db133805141259142862 0
 98C:\webstorm_projects\google-meeting-captions-resolver\node_modules\.bin\update-browserslist-db.cmd133805141259142862 0
-70C:\webstorm_projects\google-meeting-captions-resolver\dist\main.js.map133852240107272056 0
+70C:\webstorm_projects\google-meeting-captions-resolver\dist\main.js.map133852267589155054 0
 70C:\webstorm_projects\google-meeting-captions-resolver\.idea\.gitignore133804675117363612 0
 78C:\webstorm_projects\google-meeting-captions-resolver\.idea\google-meeting.iml133804675257297125 0
 78C:\webstorm_projects\google-meeting-captions-resolver\.idea\inspectionProfiles133804675080454263 1
 67C:\webstorm_projects\google-meeting-captions-resolver\.idea\vcs.xml133804675257453459 0
-73C:\webstorm_projects\google-meeting-captions-resolver\.idea\workspace.xml133851390472519540 0
+73C:\webstorm_projects\google-meeting-captions-resolver\.idea\workspace.xml133853125959670726 0
 100C:\webstorm_projects\google-meeting-captions-resolver\.idea\inspectionProfiles\profiles_settings.xml133804675080454263 0
