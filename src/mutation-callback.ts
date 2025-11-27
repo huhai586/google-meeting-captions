@@ -24,10 +24,9 @@ const speakerSessions = new WeakMap<Node, SpeakerSession>();
 // 处理单个字幕 div
 const processCaptionDiv = (div: Node, receiver: captionsReceiver) => {
     // 只处理元素节点
-    if (!(div instanceof Element)) {
+    if (!(div instanceof Element) || !div) {
         return;
     }
-    
     // 提取发言人和内容
     const { speaker, content } = extractCaptionInfo(div);
     if (!speaker || !content) {

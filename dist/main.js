@@ -18,8 +18,8 @@ const $2266d2c6dd11209a$var$extractCaptionInfo = (wrapperDiv)=>{
     const speakerNode = wrapperDiv?.childNodes?.[0]; // 第1个div：人名
     const contentNode = wrapperDiv?.childNodes?.[1]; // 第2个div：内容
     return {
-        speaker: speakerNode.textContent || '',
-        content: contentNode.textContent || ''
+        speaker: speakerNode?.textContent || '',
+        content: contentNode?.textContent || ''
     };
 };
 // 用 WeakMap 存储每个字幕 div 的 session 信息
@@ -28,7 +28,7 @@ const $2266d2c6dd11209a$var$speakerSessions = new WeakMap();
 // 处理单个字幕 div
 const $2266d2c6dd11209a$var$processCaptionDiv = (div, receiver)=>{
     // 只处理元素节点
-    if (!(div instanceof Element)) return;
+    if (!(div instanceof Element) || !div) return;
     // 提取发言人和内容
     const { speaker: speaker, content: content } = $2266d2c6dd11209a$var$extractCaptionInfo(div);
     if (!speaker || !content) return;
