@@ -7,8 +7,8 @@ const extractCaptionInfo = (wrapperDiv: Node) => {
     const contentNode = wrapperDiv?.childNodes?.[1];  // 第2个div：内容
 
     return {
-        speaker: speakerNode.textContent || '',
-        content: contentNode.textContent || ''
+        speaker: speakerNode?.textContent || '',
+        content: contentNode?.textContent || ''
     };
 };
 
